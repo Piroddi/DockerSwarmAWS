@@ -1,5 +1,6 @@
+
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
-  name = "Docker_swarm_ssm"
+  name = var.instance_profile_name
   role = aws_iam_role.ssm_instance_profile.name
 }
 
@@ -24,4 +25,9 @@ resource "aws_iam_role" "ssm_instance_profile" {
 resource "aws_iam_role_policy_attachment" "ssm_full_access" {
   role       = aws_iam_role.ssm_instance_profile.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "secret_manager" {
+  role       = aws_iam_role.ssm_instance_profile.name
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 }
