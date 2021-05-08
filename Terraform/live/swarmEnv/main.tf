@@ -76,5 +76,5 @@ module "node2" {
 
 resource "time_sleep" "wait_120_seconds" {
   depends_on = [module.master]
-  create_duration = "125s"
+  create_duration = "120s"
 }

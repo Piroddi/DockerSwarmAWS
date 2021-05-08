@@ -1,6 +1,7 @@
 #!/bin/bash
 #Install utils
 sudo apt-get update -y
+
 sudo apt-get install -y \
     apt-transport-https -y \
     ca-certificates -y \
@@ -17,8 +18,8 @@ sudo apt-get update -y
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
 #Install AWS CLI
-sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-sudo unzip awscliv2.zip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
 sudo ./aws/install
 
 #Initialise Docker Swarm
@@ -26,6 +27,6 @@ sudo ./aws/install
 sudo docker swarm init --advertise-addr 10.0.1.5:2377 --listen-addr 10.0.1.5:2377
 
 #Save swarm token to aws
-sudo aws secretsmanager create-secret --name Docker-swarm/join-token --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token worker -q)
+sudo aws secretsmanager create-secret --name DockerSwarm/join-swarm-token --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token worker -q)
 
 

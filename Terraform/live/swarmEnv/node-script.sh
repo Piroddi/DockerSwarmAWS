@@ -1,6 +1,7 @@
 #!/bin/bash
 #Install utils
 sudo apt-get update -y
+
 sudo apt-get install -y \
     apt-transport-https -y \
     ca-certificates -y \
@@ -22,4 +23,4 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 #Join swarm (Getting swarm token from secret manager)
-sudo docker swarm join --token $(sudo aws secretsmanager get-secret-value --secret-id Docker-swarm/join-token --version-stage AWSCURRENT | jq -r .SecretString) 10.0.1.5:2377
+sudo docker swarm join --token $(sudo aws secretsmanager get-secret-value --secret-id DockerSwarm/join-swarm-token --version-stage AWSCURRENT | jq -r .SecretString) 10.0.1.5:2377
