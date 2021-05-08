@@ -26,6 +26,6 @@ sudo ./aws/install
 sudo docker swarm init --advertise-addr 10.0.1.5:2377 --listen-addr 10.0.1.5:2377
 
 #Save swarm token to aws
-sudo aws secretsmanager create-secret --name Docker-Swarm/join-token --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token worker -q)
+sudo aws secretsmanager create-secret --name Docker-swarm/join-token --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token worker -q)
 
 
