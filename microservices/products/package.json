@@ -1,0 +1,31 @@
+{
+  "name": "products-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "SET NODE_ENV=test & mocha 'src/test/**/*.js'"
+  },
+  "keywords": [],
+  "author": "Luke Mwila",
+  "license": "ISC",
+  "engines": {
+    "node": "12.7.0",
+    "npm": "6.10.0"
+  },
+  "devDependencies": {
+    "husky": "^3.1.0",
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mocha": "^6.2.2",
+    "supertest": "^4.0.2",
+    "uuid": "^3.3.3"
+  }
+}
