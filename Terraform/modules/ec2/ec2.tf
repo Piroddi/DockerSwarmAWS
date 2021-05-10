@@ -14,6 +14,7 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
+
 module "ec2" {
   source = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 2.0"
@@ -29,6 +30,8 @@ module "ec2" {
   subnet_ids = var.private_subnet_ids
   user_data = var.user_data
   private_ips = var.instance_ips
+
+  vpc_security_group_ids = var.security_group_ids
 }
 
 

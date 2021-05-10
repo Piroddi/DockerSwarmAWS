@@ -21,19 +21,6 @@ terraform {
   }
 }
 
-locals {
-  number_of_managers = 3
-  number_of_nodes = 3
-  initial_manager_ip = "10.0.1.5"
-  region = "eu-west-1"
-  tags = {
-    Name = "Docker-Swarm"
-    Project = "DockerCon"
-    Team = "Kelvin-Piroddi-Lukonde Mwila"
-    Description = "Docker-Swarm-A-journey-to-the-cloud"
-  }
-}
-
 module "network" {
   source = "../../modules/network"
 
@@ -48,6 +35,13 @@ module "iam" {
   instance_profile_name = "Docker-swarm-ssm"
 }
 
+module "sg" {
+  source = "../../modules/ec2_security_groups"
+  inbound_rules = local.sg_inbound_rules
+  sg_name = "Swarm"
+  vpc_id = module.network.vpc_id
+}
+
 module "initial_manager" {
   source = "../../modules/ec2"
   number_of_instances = 1
@@ -56,9 +50,9 @@ module "initial_manager" {
   ec2_name = "Initial-Manager"
   instance_profile_name = module.iam.instance_profile_name
   private_subnet_ids = module.network.private_subnets
-  instance_ips = [
-    local.initial_manager_ip]
+  instance_ips = [local.initial_manager_ip]
   user_data = data.template_file.initial-manager.rendered
+  security_group_ids = [module.sg.security_group_id]
 }
 
 module "managers" {
@@ -73,6 +67,7 @@ module "managers" {
   private_subnet_ids = [module.network.private_subnets[1],module.network.private_subnets[2]]
   instance_ips = ["10.0.2.5", "10.0.3.5"]
   user_data = data.template_file.managers.rendered
+  security_group_ids = [module.sg.security_group_id]
 }
 
 module "nodes" {
@@ -86,6 +81,7 @@ module "nodes" {
   private_subnet_ids = module.network.private_subnets
   instance_ips = ["10.0.1.6", "10.0.2.6", "10.0.3.6"]
   user_data = data.template_file.nodes.rendered
+  security_group_ids = [module.sg.security_group_id]
 }
 
 module "nlb" {
