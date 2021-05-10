@@ -10,32 +10,32 @@ locals {
     Description = "Docker-Swarm-A-journey-to-the-cloud"
   }
   sg_inbound_rules = {
-    swarm = {
+    swarm-1 = {
       from_port = "2377"
       to_port = "2377"
       protocol = "tcp"
-      cidr_block = [module.network.vpc_cidr_block]
+      cidr_block = null
       self = true
     }
-    swarm = {
+    swarm-2 = {
       from_port = "7946"
       to_port = "7946"
       protocol = "tcp"
-      cidr_block = [module.network.vpc_cidr_block]
+      cidr_block = null
       self = true
     },
-    swarm = {
+    swarm-3 = {
       from_port = "7946"
       to_port = "7946"
       protocol = "udp"
-      cidr_block = [module.network.vpc_cidr_block]
+      cidr_block = null
       self = true
     },
-    swarm = {
+    swarm-4 = {
       from_port = "4789"
       to_port = "4789"
       protocol = "udp"
-      cidr_block = [module.network.vpc_cidr_block]
+      cidr_block = null
       self = true
     },
     nlb = {
@@ -43,7 +43,7 @@ locals {
       to_port = "80"
       protocol = "tcp"
       cidr_block = [module.network.vpc_cidr_block]
-      self = true
+      self = false
     }
   }
 }
