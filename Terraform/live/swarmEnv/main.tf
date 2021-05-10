@@ -10,7 +10,7 @@ terraform {
       version = "~> 3.0"
     }
   }
-  required_version = ">= 0.14, < 0.15"
+  required_version = ">= 0.15, < 0.16"
 
   backend "s3" {
     bucket = "euw1-dockercon-terraform-state"
