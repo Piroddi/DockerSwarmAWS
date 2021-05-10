@@ -18,13 +18,19 @@ module "ec2" {
   source = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 2.0"
 
+  instance_count = var.number_of_instances
+  use_num_suffix = true
+
   ami = data.aws_ami.ubuntu.id
   instance_type = var.ec2_instance_type
   name = var.ec2_name
 
   iam_instance_profile = var.instance_profile_name
-  subnet_id = var.private_subnet_id
-  user_data_base64 = filebase64(var.user_data_file_path)
-  private_ip = var.instance_ip
+  subnet_ids = var.private_subnet_ids
+  user_data = var.user_data
+  private_ips = var.instance_ips
 }
+
+
+
 

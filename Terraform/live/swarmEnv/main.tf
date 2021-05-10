@@ -3,10 +3,6 @@ provider "aws" {
   profile = "piroddicloud"
 }
 
-locals {
-  region = "eu-west-1"
-}
-
 terraform {
   required_providers {
     aws = {
@@ -25,6 +21,19 @@ terraform {
   }
 }
 
+locals {
+  number_of_managers = 3
+  number_of_nodes = 3
+  initial_manager_ip = "10.0.1.5"
+  region = "eu-west-1"
+  tags = {
+    Name = "Docker-Swarm"
+    Project = "DockerCon"
+    Team = "Kelvin-Piroddi-Lukonde Mwila"
+    Description = "Docker-Swarm-A-journey-to-the-cloud"
+  }
+}
+
 module "network" {
   source = "../../modules/network"
 
@@ -39,42 +48,57 @@ module "iam" {
   instance_profile_name = "Docker-swarm-ssm"
 }
 
-module "master" {
+module "initial_manager" {
   source = "../../modules/ec2"
+  number_of_instances = 1
 
   ec2_instance_type = "t2.micro"
-  ec2_name = "Swarm-master"
+  ec2_name = "Initial-Manager"
   instance_profile_name = module.iam.instance_profile_name
-  user_data_file_path = "${path.module}/master-script.sh"
-  private_subnet_id = module.network.private_subnets[0]
-  instance_ip = "10.0.1.5"
+  private_subnet_ids = module.network.private_subnets
+  instance_ips = [
+    local.initial_manager_ip]
+  user_data = data.template_file.initial-manager.rendered
 }
 
-module "node1" {
-  depends_on = [time_sleep.wait_120_seconds]
+module "managers" {
+
+  depends_on = [module.initial_manager]
   source = "../../modules/ec2"
+  number_of_instances = (local.number_of_managers - 1)
 
   ec2_instance_type = "t2.micro"
-  ec2_name = "Swarm-node1"
+  ec2_name = "Swarm-Manager"
   instance_profile_name = module.iam.instance_profile_name
-  user_data_file_path = "${path.module}/node-script.sh"
-  private_subnet_id = module.network.private_subnets[1]
-  instance_ip = "10.0.2.5"
+  private_subnet_ids = [module.network.private_subnets[1],module.network.private_subnets[2]]
+  instance_ips = ["10.0.2.5", "10.0.3.5"]
+  user_data = data.template_file.managers.rendered
 }
 
-module "node2" {
-  depends_on = [time_sleep.wait_120_seconds]
+module "nodes" {
+  depends_on = [module.managers]
   source = "../../modules/ec2"
 
+  number_of_instances = local.number_of_nodes
   ec2_instance_type = "t2.micro"
-  ec2_name = "Swarm-node2"
+  ec2_name = "Swarm-Node"
   instance_profile_name = module.iam.instance_profile_name
-  user_data_file_path = "${path.module}/node-script.sh"
-  private_subnet_id = module.network.private_subnets[2]
-  instance_ip = "10.0.3.5"
+  private_subnet_ids = module.network.private_subnets
+  instance_ips = ["10.0.1.6", "10.0.2.6", "10.0.3.6"]
+  user_data = data.template_file.nodes.rendered
 }
 
-resource "time_sleep" "wait_120_seconds" {
-  depends_on = [module.master]
-  create_duration = "120s"
+module "nlb" {
+  depends_on = [module.nodes]
+
+  source = "../../modules/nlb"
+  nlb_name = "Docker-Swarm"
+  public_subnet_ids = module.network.public_subnets
+  tags = local.tags
+  target_group_port = "80"
+  vpc_id = module.network.vpc_id
+  worker_node_ips = ["10.0.1.6", "10.0.2.6", "10.0.3.6"]
+  worker_node_port = "3002"
 }
+
+
