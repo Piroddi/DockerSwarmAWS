@@ -6,7 +6,7 @@ locals {
   tags = {
     Name = "Docker-Swarm"
     Project = "DockerCon"
-    Team = "Kelvin-Piroddi-Lukonde Mwila"
+    Team = "Kelvin-Piroddi-Lukonde-Mwila"
     Description = "Docker-Swarm-A-journey-to-the-cloud"
   }
   sg_inbound_rules = {

@@ -3,7 +3,7 @@ resource "aws_vpc_endpoint" "ssm" {
   service_name = "com.amazonaws.eu-west-1.ssm"
   vpc_endpoint_type = "Interface"
   private_dns_enabled = true
-  security_group_ids = [module.vpc.default_security_group_id]
+  security_group_ids = var.security_group_ids
   subnet_ids = module.vpc.private_subnets
 }
 
@@ -12,7 +12,7 @@ resource "aws_vpc_endpoint" "ssm-messages" {
   service_name = "com.amazonaws.eu-west-1.ssmmessages"
   vpc_endpoint_type = "Interface"
   private_dns_enabled = true
-  security_group_ids = [module.vpc.default_security_group_id]
+  security_group_ids = var.security_group_ids
   subnet_ids = module.vpc.private_subnets
 }
 
@@ -24,7 +24,7 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   private_dns_enabled = true
   subnet_ids          = module.vpc.private_subnets
 
-  security_group_ids = [module.vpc.default_security_group_id]
+  security_group_ids = var.security_group_ids
 }
 
 resource "aws_vpc_endpoint" "ecr_api" {
@@ -34,7 +34,7 @@ resource "aws_vpc_endpoint" "ecr_api" {
   private_dns_enabled = true
   subnet_ids          = module.vpc.private_subnets
 
-  security_group_ids = [module.vpc.default_security_group_id]
+  security_group_ids = var.security_group_ids
 }
 
 # S3
