@@ -44,6 +44,13 @@ locals {
       protocol = "tcp"
       cidr_block = [module.network.vpc_cidr_block]
       self = false
+    },
+    https = {
+      from_port = "443"
+      to_port = "443"
+      protocol = "tcp"
+      cidr_block = [module.network.vpc_cidr_block]
+      self = false
     }
   }
 }
