@@ -23,10 +23,7 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 #Initialise Docker Swarm
-
 sudo docker swarm init --advertise-addr 10.0.1.5:2377 --listen-addr 10.0.1.5:2377
 
 #Save swarm token to aws
 sudo aws secretsmanager create-secret --name DockerSwarm/join-swarm-token --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token worker -q)
-
-
