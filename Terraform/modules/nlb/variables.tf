@@ -6,7 +6,7 @@ variable "target_group_port" {
   type = string
 }
 
-variable "worker_node_ids" {
+variable "worker_node_ips" {
   type = list(string)
 }
 
