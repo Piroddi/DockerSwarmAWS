@@ -1,6 +1,6 @@
 provider "aws" {
   region = local.region
-  profile = "piroddicloud"
+  profile = "DockerCon"
 }
 
 terraform {
@@ -10,7 +10,7 @@ terraform {
       version = "~> 3.0"
     }
   }
-  required_version = ">= 0.15, < 0.16"
+  required_version = ">= 0.13, < 0.14"
 
   backend "s3" {
     bucket = "euw1-dockercon-terraform-state"
