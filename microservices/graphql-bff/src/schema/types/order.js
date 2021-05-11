@@ -15,7 +15,7 @@ const OrderType = new GraphQLObjectType({
       resolve(parentValue, args) {
         return axios
           .get(
-            `${process.env.PRODUCTS_SERVICE_PORT}/v1/products/${parentValue.productId}`
+            `http://products-api:3004/v1/products/${parentValue.productId}`
           )
           .then(response => response.data);
       }
