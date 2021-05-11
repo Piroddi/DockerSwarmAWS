@@ -3,6 +3,7 @@ data "template_file" "initial-manager" {
   vars = {
     initial-manager-ip = local.initial_manager_ip
     initial-manager = true
+    docker-compose-b64 = filebase64("../../../microservices/docker-compose.yaml")
     worker = false
     new-manager = false
   }

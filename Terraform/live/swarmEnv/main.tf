@@ -29,6 +29,7 @@ module "network" {
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
   security_group_ids = [module.sg.security_group_id]
+  region = local.region
 }
 
 module "iam" {
@@ -44,6 +45,8 @@ module "sg" {
 }
 
 module "initial_manager" {
+  depends_on = [module.network]
+
   source = "../../modules/ec2"
   number_of_instances = 1
 
@@ -72,7 +75,7 @@ module "managers" {
 }
 
 module "nodes" {
-  depends_on = [module.managers]
+  depends_on = [module.initial_manager]
   source = "../../modules/ec2"
 
   number_of_instances = local.number_of_nodes
@@ -97,5 +100,3 @@ module "nlb" {
   worker_node_ips = ["10.0.1.6", "10.0.2.6", "10.0.3.6"]
   worker_node_port = "3002"
 }
-
-

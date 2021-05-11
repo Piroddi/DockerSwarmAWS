@@ -1,8 +1,8 @@
 locals {
+  region = "eu-west-1"
   number_of_managers = 1
   number_of_nodes = 3
   initial_manager_ip = "10.0.1.5"
-  region = "eu-west-1"
   tags = {
     Name = "Docker-Swarm"
     Project = "DockerCon"
@@ -39,7 +39,7 @@ locals {
       self = true
     },
     nlb = {
-      from_port = "80"
+      from_port = "3002"
       to_port = "3002"
       protocol = "tcp"
       cidr_block = [module.network.vpc_cidr_block]

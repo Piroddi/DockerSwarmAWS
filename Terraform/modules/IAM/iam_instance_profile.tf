@@ -36,8 +36,3 @@ resource "aws_iam_role_policy_attachment" "ecr" {
   role       = aws_iam_role.ssm_instance_profile.name
   policy_arn = "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
 }
-
-resource "aws_iam_role_policy_attachment" "s3" {
-  role       = aws_iam_role.ssm_instance_profile.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
