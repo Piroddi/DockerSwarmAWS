@@ -6,7 +6,7 @@ locals {
   tags = {
     Name = "Docker-Swarm"
     Project = "DockerCon"
-    Team = "Kelvin-Piroddi-Lukonde Mwila"
+    Team = "Kelvin-Piroddi-Lukonde-Mwila"
     Description = "Docker-Swarm-A-journey-to-the-cloud"
   }
   sg_inbound_rules = {
@@ -41,6 +41,13 @@ locals {
     nlb = {
       from_port = "80"
       to_port = "3002"
+      protocol = "tcp"
+      cidr_block = [module.network.vpc_cidr_block]
+      self = false
+    },
+    https = {
+      from_port = "443"
+      to_port = "443"
       protocol = "tcp"
       cidr_block = [module.network.vpc_cidr_block]
       self = false
