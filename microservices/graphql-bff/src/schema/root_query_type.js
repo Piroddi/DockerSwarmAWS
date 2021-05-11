@@ -14,7 +14,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(OrderType),
       resolve(parentValue, args) {
         return axios
-          .get(`${process.env.ORDERS_SERVICE_PORT}/v1/orders`)
+          .get(`http://orders-api:3003/v1/orders`)
           .then(response => response.data);
       }
     },
@@ -22,7 +22,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(ProductType),
       resolve(parentValue, args) {
         return axios
-          .get(`${process.env.PRODUCTS_SERVICE_PORT}/v1/products`)
+          .get(`http://products-api:3004/v1/products`)
           .then(response => response.data);
       }
     }
