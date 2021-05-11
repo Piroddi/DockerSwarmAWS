@@ -1,5 +1,5 @@
 locals {
-  number_of_managers = 3
+  number_of_managers = 1
   number_of_nodes = 3
   initial_manager_ip = "10.0.1.5"
   region = "eu-west-1"
@@ -40,7 +40,7 @@ locals {
     },
     nlb = {
       from_port = "80"
-      to_port = "80"
+      to_port = "3002"
       protocol = "tcp"
       cidr_block = [module.network.vpc_cidr_block]
       self = false
