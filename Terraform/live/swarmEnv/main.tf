@@ -1,6 +1,6 @@
 provider "aws" {
   region = local.region
-  profile = "DockerCon"
+  profile = "piroddicloud"
 }
 
 terraform {
