@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   graphql-bff-server-api:
-    image: '816070112642.dkr.ecr.eu-west-1.amazonaws.com/swarm-services/graphql-bff:latest'
+    image: 'piroddi/swarm-services-graphql-bff:latest'
     #build:
     #  context: ./graphql-bff
     #  dockerfile: Dockerfile
@@ -16,7 +16,7 @@ services:
       ORDERS_SERVICE_PORT: orders-api:3003
       PRODUCTS_SERVICE_PORT: products-api:3004
   orders-api:
-    image: '816070112642.dkr.ecr.eu-west-1.amazonaws.com/swarm-services/orders:latest'
+    image: 'piroddi/swarm-services-orders:latest'
     #build:
     #  context: ./orders
     #  dockerfile: Dockerfile
@@ -28,7 +28,7 @@ services:
     restart: on-failure
     container_name: orders
   products-api:
-    image: '816070112642.dkr.ecr.eu-west-1.amazonaws.com/swarm-services/products:latest'
+    image: 'piroddi/swarm-services-products:latest'
     #build:
     #  context: ./products
     #  dockerfile: Dockerfile

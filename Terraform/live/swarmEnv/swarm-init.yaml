@@ -24,10 +24,9 @@ write_files:
 
 runcmd:
 %{ if initial-manager == "true" }  - docker swarm init --advertise-addr ${initial-manager-ip}:2377 --listen-addr ${initial-manager-ip}:2377%{ endif }
-%{ if initial-manager == "true" }  - aws secretsmanager create-secret --name Docker12/worker-join --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token worker -q) --region eu-west-1%{ endif }
-%{ if initial-manager == "true" }  - aws secretsmanager create-secret --name Docker12/manager-join --description "Docker swarm join token" --secret-string $(sudo docker swarm join-token manager -q) --region eu-west-1%{ endif }
-%{ if initial-manager == "true" }  - ECR_REGISTRY_AUTH=$(aws ecr get-login --no-include-email --region eu-west-1)%{ endif }
-%{ if initial-manager == "true" }  - eval "$ECR_REGISTRY_AUTH"%{ endif }
-%{ if initial-manager == "true" }  - docker stack deploy --compose-file /etc/docker-compose.yaml dockerconstack --with-registry-auth%{ endif }
-%{ if new-manager == "true" }  - docker swarm join --token $(sudo aws secretsmanager get-secret-value --secret-id Docker12/manager-join --version-stage AWSCURRENT --region eu-west-1 | jq -r .SecretString) ${initial-manager-ip}:2377%{ endif }
-%{ if worker == "true" }  - docker swarm join --token $(sudo aws secretsmanager get-secret-value --secret-id Docker12/worker-join --version-stage AWSCURRENT --region eu-west-1 | jq -r .SecretString) ${initial-manager-ip}:2377%{ endif }
+%{ if initial-manager == "true" }  - aws secretsmanager create-secret --name Docker/worker-join --description "Docker swarm join token" --secret-string $(docker swarm join-token worker -q) --region eu-west-1%{ endif }
+%{ if initial-manager == "true" }  - aws secretsmanager create-secret --name Docker/manager-join --description "Docker swarm join token" --secret-string $(docker swarm join-token manager -q) --region eu-west-1%{ endif }
+%{ if initial-manager == "true" }  - docker node update --availability drain ip-10-0-1-5%{ endif }
+%{ if initial-manager == "true" }  - docker stack deploy --compose-file /etc/docker-compose.yaml dockerconstack%{ endif }
+%{ if new-manager == "true" }  - docker swarm join --token $(aws secretsmanager get-secret-value --secret-id Docker/manager-join --version-stage AWSCURRENT --region eu-west-1 | jq -r .SecretString) ${initial-manager-ip}:2377%{ endif }
+%{ if worker == "true" }  - docker swarm join --token $(aws secretsmanager get-secret-value --secret-id Docker/worker-join --version-stage AWSCURRENT --region eu-west-1 | jq -r .SecretString) ${initial-manager-ip}:2377%{ endif }
