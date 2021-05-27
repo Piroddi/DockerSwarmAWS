@@ -20,6 +20,27 @@ The EC2 instances that make up the cluster are deployed to private subnets in th
 
 The application is accessible through an NLB associated with the public subnets and forwards incoming traffic to the nodes in the private subnets on the relevant port for the application. 
 
+### Swarm Cluster Configuration - swarm-init.yaml
+The swarm-init.yaml contains the procedural configuration steps to install the dependencies on the Ubuntu nodes being used in the cluster. The fundamental step in this process is to setup the initial manager and generate the tokens for other nodes to join the cluster with a specific role. The tokens that the nodes need to use to join the cluster either as a manager or worker are pushed to Secrets Manager and then pulled by the other nodes when executing the `join` command. 
+
+```
+# Initialization 
+docker swarm init --advertise-addr ${initial-manager-ip}:2377 --listen-addr ${initial-manager-ip}:2377
+
+# Push join token for workers to Secrets Manager
+aws secretsmanager create-secret --name Docker/worker-join --description "Docker swarm join token" --secret-string $(docker swarm join-token worker -q) --region eu-west-1
+
+# Push join token for additional manager to Secrets Manager
+aws secretsmanager create-secret --name Docker/manager-join --description "Docker swarm join token" --secret-string $(docker swarm join-token manager -q) --region eu-west-1
+
+# Join command for manager using secret token from Secrets Manager
+docker swarm join --token $(aws secretsmanager get-secret-value --secret-id Docker/manager-join --version-stage AWSCURRENT --region eu-west-1 | jq -r .SecretString) ${initial-manager-ip}:2377
+
+# Join command for wroker using secret token from Secrets Manager
+docker swarm join --token $(aws secretsmanager get-secret-value --secret-id Docker/worker-join --version-stage AWSCURRENT --region eu-west-1 | jq -r .SecretString) ${initial-manager-ip}:2377
+
+```
+
 ### Microservice Application
 The microservice application consists of 3 services, a GraphQL service which acts as the gateway to the products and orders services. All services are in Node.JS to Kelvin's dismay. The application is a very basic example of ecommerce components. Each service is containerised with Docker. 
 
