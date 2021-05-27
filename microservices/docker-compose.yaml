@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  graphql-bff-server-api:
+    image: 'piroddi/swarm-services-graphql-bff:latest'
+    #build:
+    #  context: ./graphql-bff
+    #  dockerfile: Dockerfile
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - '3002:3002'
+    restart: on-failure
+    container_name: graphql-bff-server-api
+    environment:
+      ORDERS_SERVICE_PORT: orders-api:3003
+      PRODUCTS_SERVICE_PORT: products-api:3004
+  orders-api:
+    image: 'piroddi/swarm-services-orders:latest'
+    #build:
+    #  context: ./orders
+    #  dockerfile: Dockerfile
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - '3003:3003'
+    restart: on-failure
+    container_name: orders
+  products-api:
+    image: 'piroddi/swarm-services-products:latest'
+    #build:
+    #  context: ./products
+    #  dockerfile: Dockerfile
+    deploy:
+      mode: replicated
+      replicas: 3
+    ports:
+      - '3004:3004'
+    restart: on-failure
+    container_name: products
