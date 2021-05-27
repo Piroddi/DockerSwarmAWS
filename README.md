@@ -13,7 +13,7 @@ Deploying images and containers
 Containers, unfortunately, don't inherently accomplish all this for you. They are merely pieces that require a crane, like DockerSwarm, to fulfill the orchestration responsibilities.<br /><br />
 Container orchestration automates the scheduling, deployment, networking, scaling, health monitoring, and management of containers. If you have ever tried to manually scale your deployments to maximize efficiency or secure your applications consistently across platforms, you have already experienced many of the pains a container orchestration platform can help solve. 
 
-## Overview
+## Project Overview
 ### Infrastructure
 All the infrastructure components demonstrated in the Docker Swarm in AWS diagram below are created using Terraform. This includes the networking components such as the VPC, the Subnets, the Network Load Balancer, the EC2 instances used for the managers and the workers, and their respective Security Groups. 
 
