@@ -15,7 +15,10 @@ Container orchestration automates the scheduling, deployment, networking, scalin
 
 ## Project Overview
 ### Infrastructure
-All the infrastructure components demonstrated in the Docker Swarm in AWS diagram below are created using Terraform. This includes the networking components such as the VPC, the Subnets, the Network Load Balancer, the EC2 instances used for the managers and the workers, and their respective Security Groups. 
+All the infrastructure components demonstrated in the Docker Swarm in AWS diagram below are created using Terraform. This includes the networking components such as the VPC, the Subnets, the Network Load Balancer, the EC2 instances used for the managers and the workers, and their respective Security Groups. <br /><br />
+The EC2 instances that make up the cluster are deployed to private subnets in the VPC. Since the nodes to have access to the Internet for installation of dependencies, a NAT Gateway is deployed to the public subnets to allow traffic from the Internet to reach the private nodes. 
+
+The application is accessible through an NLB associated with the public subnets and forwards incoming traffic to the nodes in the private subnets on the relevant port for the application. 
 
 ### Microservice Application
 The microservice application consists of 3 services, a GraphQL service which acts as the gateway to the products and orders services. All services are in Node.JS to Kelvin's dismay. The application is a very basic example of ecommerce components. Each service is containerised with Docker. 
