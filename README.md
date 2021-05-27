@@ -14,11 +14,26 @@ Containers, unfortunately, don't inherently accomplish all this for you. They ar
 Container orchestration automates the scheduling, deployment, networking, scaling, health monitoring, and management of containers. If you have ever tried to manually scale your deployments to maximize efficiency or secure your applications consistently across platforms, you have already experienced many of the pains a container orchestration platform can help solve. 
 
 ## Project Overview
+
+### Prerequisites
+To create the infrastructure and test the microservices application locally be sure to have the following installed:
+- AWS account
+- Docker 
+- Docker Compose
+- Terraform (version >= 0.13, < 0.14)
+
 ### Infrastructure
 All the infrastructure components demonstrated in the Docker Swarm in AWS diagram below are created using Terraform. This includes the networking components such as the VPC, the Subnets, the Network Load Balancer, the EC2 instances used for the managers and the workers, and their respective Security Groups. <br /><br />
 The EC2 instances that make up the cluster are deployed to private subnets in the VPC. Since the nodes to have access to the Internet for installation of dependencies, a NAT Gateway is deployed to the public subnets to allow traffic from the Internet to reach the private nodes. 
 
 The application is accessible through an NLB associated with the public subnets and forwards incoming traffic to the nodes in the private subnets on the relevant port for the application. 
+
+#### Before You Deploy Infra
+- Make sure you update the name of your backend state bucket to a globally unique name
+- Update the region the resources are to be deployed in by changing the value in the local.tf and main.tf files.
+- Before running the terraform execution command, make sure you update the main.tf file and specify the profile property to match the AWS profile you intend to use to create these resources in a specific account.
+
+To execute creation of the resources defined in the Terraform folder, run the `terraform apply` command in the Terraform/live/swarmEnv folder.
 
 ### Swarm Cluster Configuration - swarm-init.yaml
 The swarm-init.yaml contains the procedural configuration steps to install the dependencies on the Ubuntu nodes being used in the cluster. The fundamental step in this process is to setup the initial manager and generate the tokens for other nodes to join the cluster with a specific role. The tokens that the nodes need to use to join the cluster either as a manager or worker are pushed to Secrets Manager and then pulled by the other nodes when executing the `join` command. 
@@ -54,6 +69,9 @@ This same configuration file is also used to deploy the stack onto the Docker Sw
 docker stack deploy --compose-file <docker-compose-file>
 ```
 Details of how this file is uploaded and used for the stack can be seen in the swarm-init.yaml file in the Terraform/live/swarmEnv folder. The images for each of the services are stored in Kelvin's public repository on DockerHub. You can make use of these or build your own and push to your own repository. If you make changes to application locally and want to test the services, you can uncomment the build configuration to point to the local Dockerfiles to rebuild the application with the relevant changes.
+
+#### Testing Individual Microservices
+You can import the Postman collection in the microservices folder to start testing the microservices individually.
 
 ```
 version: '3.9'
