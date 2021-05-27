@@ -1,5 +1,17 @@
-# Docker Swarm - A journey to the cloud 
+# Docker Swarm - A Journey to the AWS Cloud 
 This repository contains the source code and architecture diagrams for the infrastructure and application demonstrated in the talk presented by Kelvin Piroddi and Lukonde Mwila at DockerCon 2021.
+
+## Container Orchestration
+As great as they are, it's not enough to containerize your applications if you don't have a system that enables you to automatically fulfill the following:
+Deploying images and containers
+- Integrate and orchestrate these modular parts
+- Managing the scaling of containers and clusters based on the demand
+- Resource balancing in containers and clusters
+- Provide communication across a cluster
+- Traffic management for services
+
+Containers, unfortunately, don't inherently accomplish all this for you. They are merely pieces that require a crane, like DockerSwarm, to fulfill the orchestration responsibilities.<br /><br />
+Container orchestration automates the scheduling, deployment, networking, scaling, health monitoring, and management of containers. If you have ever tried to manually scale your deployments to maximize efficiency or secure your applications consistently across platforms, you have already experienced many of the pains a container orchestration platform can help solve. 
 
 ## Overview
 ### Infrastructure
