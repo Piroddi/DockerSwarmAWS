@@ -20,6 +20,7 @@ resource "aws_iam_role" "ssm_instance_profile" {
       },
     ]
   })
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_full_access" {

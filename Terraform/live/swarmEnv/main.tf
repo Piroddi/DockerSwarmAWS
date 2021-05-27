@@ -1,6 +1,6 @@
 provider "aws" {
   region = local.region
-  profile = "piroddicloud"
+  profile = "#CHANGEME"
 }
 
 terraform {
@@ -30,11 +30,13 @@ module "network" {
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
   security_group_ids = [module.sg.security_group_id]
   region = local.region
+  tags = local.tags
 }
 
 module "iam" {
   source = "../../modules/IAM"
   instance_profile_name = "Docker-swarm-ssm"
+  tags = local.tags
 }
 
 module "sg" {
@@ -42,6 +44,7 @@ module "sg" {
   inbound_rules = local.sg_inbound_rules
   sg_name = "Swarm"
   vpc_id = module.network.vpc_id
+  tags = local.tags
 }
 
 module "initial_manager" {
@@ -57,6 +60,7 @@ module "initial_manager" {
   instance_ips = [local.initial_manager_ip]
   user_data = data.template_file.initial-manager.rendered
   security_group_ids = [module.sg.security_group_id]
+  tags = local.tags
 }
 
 module "managers" {
@@ -72,6 +76,7 @@ module "managers" {
   instance_ips = ["10.0.2.5", "10.0.3.5"]
   user_data = data.template_file.managers.rendered
   security_group_ids = [module.sg.security_group_id]
+  tags = local.tags
 }
 
 module "nodes" {
@@ -86,6 +91,7 @@ module "nodes" {
   instance_ips = ["10.0.1.6", "10.0.2.6", "10.0.3.6"]
   user_data = data.template_file.nodes.rendered
   security_group_ids = [module.sg.security_group_id]
+  tags = local.tags
 }
 
 module "nlb" {

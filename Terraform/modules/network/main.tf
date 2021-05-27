@@ -14,15 +14,10 @@ module "vpc" {
     Name = "Docker-Swarm-public"
   }
 
-  tags = {
-    Environment = "DockerCon"
-  }
+  tags = var.tags
 
   enable_dns_hostnames = true
   enable_dns_support = true
 
-  vpc_tags = {
-    Name = "Docker-Swarm"
-    Environment = "DockerCon"
-  }
+  vpc_tags = var.tags
 }
